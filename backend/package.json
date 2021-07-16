@@ -1,0 +1,34 @@
+{
+  "name": "social-network-backend",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "preinstall": "npx npm-force-resolutions"
+  },
+  "dependencies": {
+    "apollo-server": "^2.18.2",
+    "apollo-server-express": "^2.18.2",
+    "bcryptjs": "^2.4.3",
+    "cloudinary": "^1.23.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "esm": "^3.2.25",
+    "express": "^4.16.4",
+    "graphql": "^15.3.0",
+    "graphql-tools": "^6.2.4",
+    "graphql-upload": "^12.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.10.8",
+    "nodemailer": "^6.4.13",
+    "subscriptions-transport-ws": "^0.9.18",
+    "uuid": "^8.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "resolutions": {
+    "graphql-upload": "^11.0.0"
+  }
+}
