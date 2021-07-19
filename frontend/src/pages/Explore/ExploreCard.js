@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components";
 
-import { Spacing } from 'components/Layout';
-import { LikeIcon, PostCommentIcon } from 'components/icons';
+import { Spacing } from "components/common";
+import { LikeIcon, PostCommentIcon } from "components/icons";
 
 const Overlay = styled.div`
   position: absolute;

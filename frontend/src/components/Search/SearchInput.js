@@ -35,9 +35,9 @@ const Input = styled.input`
     }
   }
   @media (min-width: ${(p) => p.theme.screen.sm}) {
-    &:focus {
-      width: 500px;
-    }
+    // &:focus {
+    //   width: 500px;
+    // }
   }
 `;
 

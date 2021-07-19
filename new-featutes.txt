@@ -1,0 +1,28 @@
+*** Original Github link: https://github.com/DimiMikadze/create-social-network
+
+*** Added features:
+->  UI
+    -> Add color, add Svg, icons
+    -> Component postCard 
+    -> Component notification item -> add time, ...
+    -> fake event (fake link, fake post, fake upload, fake comment)
+    -> add Load modal all component
+    -> Transition (dropdown)
+
+->  Restructure project
+
+->  fix bug upload file node v14: 
+        uninstall apollo-server (instead of install apollo-server-express and graphql-subscriptions)
+        Add scalar to schema and upload to resolvers
+        uploads: false in createApolloServer
+        
+Load more comment
+Public url: share link
+Load modal
+Video post
+Theme
+Setting
+User status
+Add emoticon 
+Add chat icon
+Edit post

@@ -1,29 +1,31 @@
-import React, { Fragment, useState } from 'react';
-import PropTypes from 'prop-types';
-import { useQuery } from '@apollo/client';
-import { generatePath } from 'react-router-dom';
+import React, { Fragment, useState } from "react";
+import PropTypes from "prop-types";
+import { useQuery } from "@apollo/client";
+import { generatePath } from "react-router-dom";
 
-import Skeleton from 'components/Skeleton';
-import Modal from 'components/Modal';
-import PostPopup from 'components/PostPopup';
-import PostCard from 'components/PostCard';
-import { Spacing } from 'components/Layout';
-import InfiniteScroll from 'components/InfiniteScroll';
-import { Loading } from 'components/Loading';
-import Empty from 'components/Empty';
+import {
+  Skeleton,
+  Modal,
+  Spacing,
+  InfiniteScroll,
+  Empty,
+  Loading,
+} from "components/common";
+import PostPopup from "components/PostPopup";
+import PostCard from "components/PostCard";
 
-import { PROFILE_PAGE_POSTS_LIMIT } from 'constants/DataLimit';
+import { PROFILE_PAGE_POSTS_LIMIT } from "constants/DataLimit";
 
-import { GET_USER_POSTS } from 'graphql/user';
+import { GET_USER_POSTS } from "graphql/user";
 
-import * as Routes from 'routes';
+import * as Routes from "routes";
 
 /**
  * Renders posts in profile page
  */
 const ProfilePosts = ({ username }) => {
   const [isPostPopupOpen, setIsPostPopupOpen] = useState(false);
-  const [modalPostId, setModalPostId] = useState('');
+  const [modalPostId, setModalPostId] = useState("");
   const variables = { username, skip: 0, limit: PROFILE_PAGE_POSTS_LIMIT };
   const { data, loading, fetchMore, networkStatus } = useQuery(GET_USER_POSTS, {
     variables,
@@ -31,18 +33,29 @@ const ProfilePosts = ({ username }) => {
   });
 
   const openModal = (postId) => {
-    window.history.pushState('', '', generatePath(Routes.POST, { id: postId }));
+    window.history.pushState("", "", generatePath(Routes.POST, { id: postId }));
     setModalPostId(postId);
     setIsPostPopupOpen(true);
   };
 
   const closeModal = () => {
-    window.history.pushState('', '', generatePath(Routes.USER_PROFILE, { username }));
+    window.history.pushState(
+      "",
+      "",
+      generatePath(Routes.USER_PROFILE, { username })
+    );
     setIsPostPopupOpen(false);
   };
 
   if (loading && networkStatus === 1) {
-    return <Skeleton height={500} bottom="lg" top="lg" count={PROFILE_PAGE_POSTS_LIMIT} />;
+    return (
+      <Skeleton
+        height={500}
+        bottom="lg"
+        top="lg"
+        count={PROFILE_PAGE_POSTS_LIMIT}
+      />
+    );
   }
 
   const { posts, count } = data.getUserPosts;
@@ -64,7 +77,8 @@ const ProfilePosts = ({ username }) => {
     >
       {(data) => {
         return data.map((post, i) => {
-          const showNextLoading = loading && networkStatus === 3 && data.length - 1 === i;
+          const showNextLoading =
+            loading && networkStatus === 3 && data.length - 1 === i;
 
           return (
             <Fragment key={post.id}>

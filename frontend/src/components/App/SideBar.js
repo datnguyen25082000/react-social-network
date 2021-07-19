@@ -1,17 +1,19 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { generatePath, withRouter, NavLink } from 'react-router-dom';
-import styled from 'styled-components';
+import React from "react";
+import PropTypes from "prop-types";
+import { generatePath, withRouter, NavLink } from "react-router-dom";
+import styled from "styled-components";
 
-import { Spacing } from 'components/Layout';
-import Navigation from './Navigation';
-import Avatar from 'components/Avatar';
+import { Spacing, Avatar } from "components/common";
+import Navigation from "./Navigation";
+import {
+  SIDEBAR_DESKTOP_WIDTH,
+  SIDEBAR_MOBILE_WIDTH,
+  HEADER_HEIGHT,
+} from "constants/Layout";
 
-import { SIDEBAR_DESKTOP_WIDTH, SIDEBAR_MOBILE_WIDTH, HEADER_HEIGHT } from 'constants/Layout';
+import { useStore } from "store";
 
-import { useStore } from 'store';
-
-import * as Routes from 'routes';
+import * as Routes from "routes";
 
 const Root = styled.div`
   position: fixed;
@@ -19,7 +21,7 @@ const Root = styled.div`
   left: 0;
   padding-top: ${HEADER_HEIGHT + 40}px;
   //box-shadow: 1px 1px 5px 1px #aaa;
-  
+
   height: 100%;
   width: ${SIDEBAR_MOBILE_WIDTH}px;
   transition: margin-left 0.2s ease-in-out;
@@ -36,7 +38,6 @@ const Root = styled.div`
     flex-grow: 0;
     flex-shrink: 0;
     border-right: 1px #e0e0e0 solid;
-    background-color: transparent;
     width: ${SIDEBAR_DESKTOP_WIDTH}px;
   }
 
@@ -55,14 +56,13 @@ const User = styled(NavLink)`
   padding: 20px;
   &:hover,
   &.selected {
-    
-
   }
 `;
 
 const FullName = styled.div`
   font-weight: ${(p) => p.theme.font.weight.bold};
-  color: ${(p) => (p.active ? p.theme.colors.primary.main : p.theme.colors.text.primary)};
+  color: ${(p) =>
+    p.active ? p.theme.colors.primary.main : p.theme.colors.text.primary};
   font-size: 16px;
 `;
 
@@ -72,15 +72,22 @@ const FullName = styled.div`
 const SideBar = ({ location, isOpen, sideBarRef }) => {
   const [{ auth }] = useStore();
 
-  const isAuthUsersProfilePage = auth.user.username === location.pathname.substring(1);
+  const isAuthUsersProfilePage =
+    auth.user.username === location.pathname.substring(1);
 
   return (
     <Root isOpen={isOpen} ref={sideBarRef}>
-      <User exact to={generatePath(Routes.USER_PROFILE, { username: auth.user.username })} activeClassName="selected">
+      <User
+        exact
+        to={generatePath(Routes.USER_PROFILE, { username: auth.user.username })}
+        activeClassName="selected"
+      >
         <Avatar image={auth.user.image} size={40} />
 
         <Spacing left="xxs">
-          <FullName active={isAuthUsersProfilePage}>{auth.user.fullName}</FullName>
+          <FullName active={isAuthUsersProfilePage}>
+            {auth.user.fullName}
+          </FullName>
         </Spacing>
       </User>
 

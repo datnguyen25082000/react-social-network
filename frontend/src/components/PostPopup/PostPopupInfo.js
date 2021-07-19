@@ -1,16 +1,12 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { generatePath } from 'react-router-dom';
+import React from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import { generatePath } from "react-router-dom";
 
-import { A } from 'components/Text';
-import Follow from 'components/Follow';
-import { Spacing } from 'components/Layout';
-import Avatar from 'components/Avatar';
+import { A, Follow, Spacing, Avatar } from "components/common";
+import * as Routes from "routes";
 
-import * as Routes from 'routes';
-
-import { useStore } from 'store';
+import { useStore } from "store";
 
 const Root = styled.div`
   display: flex;
@@ -44,7 +40,9 @@ const PostPopupInfo = ({ author }) => {
   return (
     <Root>
       <Author>
-        <A to={generatePath(Routes.USER_PROFILE, { username: author.username })}>
+        <A
+          to={generatePath(Routes.USER_PROFILE, { username: author.username })}
+        >
           <Avatar image={author.image} />
         </A>
 

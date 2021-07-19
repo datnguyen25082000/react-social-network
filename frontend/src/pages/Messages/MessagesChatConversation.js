@@ -1,19 +1,17 @@
-import React, { useState, useRef, useEffect } from 'react';
-import styled from 'styled-components';
-import PropTypes from 'prop-types';
-import { useMutation } from '@apollo/client';
+import React, { useState, useRef, useEffect } from "react";
+import styled from "styled-components";
+import PropTypes from "prop-types";
+import { useMutation } from "@apollo/client";
 
-import { Button, Textarea } from 'components/Form';
-import { SendIcon } from 'components/icons';
-import Avatar from 'components/Avatar';
-import { Spacing } from 'components/Layout';
+import { Button, Textarea, Spacing, Avatar } from "components/common";
+import { SendIcon } from "components/icons";
 
-import { CREATE_MESSAGE } from 'graphql/messages';
-import { GET_CONVERSATIONS } from 'graphql/user';
+import { CREATE_MESSAGE } from "graphql/messages";
+import { GET_CONVERSATIONS } from "graphql/user";
 
-import { currentDate } from 'utils/date';
+import { currentDate } from "utils/date";
 
-import * as Routes from 'routes';
+import * as Routes from "routes";
 
 const Root = styled.div`
   padding: 0 ${(p) => p.theme.spacing.sm};
@@ -62,7 +60,7 @@ const MessageDate = styled.span`
 const MessageWrapper = styled.div`
   display: flex;
   position: relative;
-  justify-content: ${(p) => p.userMessage && 'flex-end'};
+  justify-content: ${(p) => p.userMessage && "flex-end"};
   margin: ${(p) => p.theme.spacing.md} 0;
 
   &:hover ${MessageDate} {
@@ -80,7 +78,8 @@ const Message = styled.div`
   padding: ${(p) => p.theme.spacing.xxs} ${(p) => p.theme.spacing.xs};
   border-radius: ${(p) => p.theme.radius.lg};
   color: ${(p) => p.userMessage && p.theme.colors.white};
-  background-color: ${(p) => (p.userMessage ? p.theme.colors.primary.light : p.theme.colors.grey[200])};
+  background-color: ${(p) =>
+    p.userMessage ? p.theme.colors.primary.light : p.theme.colors.grey[200]};
 `;
 
 const Form = styled.form`
@@ -106,10 +105,16 @@ const SendButton = styled(Button)`
 /**
  * Component that renders messages conversations UI
  */
-const MessagesChatConversation = ({ messages, authUser, chatUser, data, match }) => {
+const MessagesChatConversation = ({
+  messages,
+  authUser,
+  chatUser,
+  data,
+  match,
+}) => {
   const bottomRef = useRef(null);
 
-  const [messageText, setMessageText] = useState('');
+  const [messageText, setMessageText] = useState("");
 
   const [createMessage] = useMutation(CREATE_MESSAGE);
 
@@ -124,7 +129,7 @@ const MessagesChatConversation = ({ messages, authUser, chatUser, data, match })
 
     if (!messageText) return;
 
-    setMessageText('');
+    setMessageText("");
     createMessage({
       variables: {
         input: {
@@ -166,9 +171,13 @@ const MessagesChatConversation = ({ messages, authUser, chatUser, data, match })
                 </Spacing>
               )}
 
-              <Message userMessage={isAuthUserReceiver}>{message.message}</Message>
+              <Message userMessage={isAuthUserReceiver}>
+                {message.message}
+              </Message>
 
-              <MessageDate userMessage={isAuthUserReceiver}>{currentDate(message.createdAt)}</MessageDate>
+              <MessageDate userMessage={isAuthUserReceiver}>
+                {currentDate(message.createdAt)}
+              </MessageDate>
             </MessageWrapper>
           );
         })}

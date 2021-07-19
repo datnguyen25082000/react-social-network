@@ -1,17 +1,23 @@
-import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import styled, { keyframes } from 'styled-components';
+import React, { useEffect } from "react";
+import PropTypes from "prop-types";
+import styled, { keyframes } from "styled-components";
 
-import { SuccessIcon, InfoIcon, WarningIcon, ErrorIcon, CloseIcon } from 'components/icons';
-import { Spacing } from './Layout';
-import { Button } from 'components/Form';
+import {
+  SuccessIcon,
+  InfoIcon,
+  WarningIcon,
+  ErrorIcon,
+  CloseIcon,
+} from "components/icons";
+import { Spacing } from "./Layout";
+import { Button } from "components/common";
 
-import theme from 'theme';
+import theme from "theme";
 
-import { allMessageTypes } from 'constants/MessageType';
+import { allMessageTypes } from "constants/MessageType";
 
-import { useStore } from 'store';
-import { CLEAR_MESSAGE } from 'store/message';
+import { useStore } from "store";
+import { CLEAR_MESSAGE } from "store/message";
 
 const fade = keyframes`
   from {
@@ -42,7 +48,7 @@ const Root = styled.div`
   color: ${(p) => p.theme.colors.white};
 `;
 
-const Close = styled(Button)`
+const Close = styled(props => <Button {...props} />)`
   position: absolute;
   right: 20px;
   top: 24px;
@@ -51,7 +57,7 @@ const Close = styled(Button)`
 /**
  * Displays global message as feedback in response to user operations
  */
-const Message = ({ children, type, autoClose }) => {
+export const Message = ({ children, type, autoClose }) => {
   const [, dispatch] = useStore();
 
   useEffect(() => {
@@ -89,7 +95,7 @@ const Message = ({ children, type, autoClose }) => {
   return (
     <Root color={Colors[type]}>
       {MessageType(type)}
-      <Spacing left={type && 'xs'}>{children}</Spacing>
+      <Spacing left={type && "xs"}>{children}</Spacing>
       <Close ghost onClick={() => dispatch({ type: CLEAR_MESSAGE })}>
         <CloseIcon color="white" />
       </Close>
@@ -106,5 +112,3 @@ Message.propTypes = {
   type: PropTypes.oneOf(allMessageTypes),
   autoClose: PropTypes.bool,
 };
-
-export default Message;

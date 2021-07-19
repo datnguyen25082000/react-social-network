@@ -5,20 +5,7 @@ import Notification from '../Notification';
 import SvgMessage from '../../../assets/svg/message.svg';
 
 const Root = styled.div`
-  position: absolute;
-  width: 100%;
-  max-height: 350px;
-  overflow-y: auto;
-  background-color: white;
-  transition: all 0.3s ease-in-out 0s, visibility 0s linear 0.3s, z-index 0s linear 0.01s;
-  right: 0;
-  top: 60px;
-  z-index: ${(p) => p.theme.zIndex.xl};
-  box-shadow: ${(p) => p.theme.shadows.sm};
 
-  @media (min-width: ${(p) => p.theme.screen.sm}) {
-    width: 280px;
-  }
 `;
 
 const Empty = styled.div`
@@ -43,7 +30,7 @@ const HeaderNotificationDropDown = ({ notificationRef, dropdownData, closeDropDo
             flexDirection: 'column',
           }}
         >
-          <img style={{ width: '60%' }} src={SvgMessage} />
+          <img style={{ width: '60%' }} src={SvgMessage} alt='logo 2' />
           <Empty>No new notifications.</Empty>
         </div>
       ) : (

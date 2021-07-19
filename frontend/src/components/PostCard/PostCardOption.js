@@ -1,14 +1,12 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { generatePath } from 'react-router-dom';
-import styled from 'styled-components';
+import React from "react";
+import PropTypes from "prop-types";
+import { generatePath } from "react-router-dom";
+import styled from "styled-components";
 
-import { Button } from 'components/Form';
-import Follow from 'components/Follow';
+import { Button, Follow } from "components/common";
+import { useStore } from "store";
 
-import { useStore } from 'store';
-
-import * as Routes from 'routes';
+import * as Routes from "routes";
 
 const Root = styled.div`
   display: flex;
@@ -54,7 +52,7 @@ const PostCardOption = ({ postId, author, closeOption, deletePost }) => {
         })}`
       );
     } catch (error) {
-      console.error('Failed to read clipboard contents: ', error);
+      console.error("Failed to read clipboard contents: ", error);
     }
 
     closeOption();

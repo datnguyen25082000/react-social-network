@@ -12,7 +12,7 @@ const Container = styled.div`
 /**
  * Component for displaying when there is no data provided
  */
-const Empty = ({ text }) => (
+export const Empty = ({ text }) => (
   <Container>
     <EmptyIcon />
 
@@ -23,5 +23,3 @@ const Empty = ({ text }) => (
 Empty.propTypes = {
   text: PropTypes.string.isRequired,
 };
-
-export default Empty;

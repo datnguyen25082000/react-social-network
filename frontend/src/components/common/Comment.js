@@ -1,23 +1,22 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { generatePath } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
+import React from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import { generatePath } from "react-router-dom";
+import { useMutation } from "@apollo/client";
 
-import { CloseIcon } from 'components/icons';
-import { A } from './Text';
-import { Spacing } from './Layout';
-import Avatar from 'components/Avatar';
+import { CloseIcon } from "components/icons";
+import { A } from "./Text";
+import { Spacing } from "./Layout";
+import { Avatar } from "components/common";
+import { GET_AUTH_USER, GET_USER } from "graphql/user";
+import { DELETE_COMMENT } from "graphql/comment";
+import { GET_POST, GET_POSTS, GET_FOLLOWED_POSTS } from "graphql/post";
 
-import { GET_AUTH_USER, GET_USER } from 'graphql/user';
-import { DELETE_COMMENT } from 'graphql/comment';
-import { GET_POST, GET_POSTS, GET_FOLLOWED_POSTS } from 'graphql/post';
+import { useNotifications } from "../../hooks/useNotifications";
 
-import { useNotifications } from '../hooks/useNotifications';
+import { useStore } from "store";
 
-import { useStore } from 'store';
-
-import * as Routes from 'routes';
+import * as Routes from "routes";
 
 const DeleteButton = styled.button`
   cursor: pointer;
@@ -50,7 +49,8 @@ const CommentSection = styled.div`
   position: relative;
   word-wrap: break-word;
   overflow: hidden;
-  padding: 0 ${(p) => p.theme.spacing.lg} ${(p) => p.theme.spacing.xxs} ${(p) => p.theme.spacing.xs};
+  padding: 0 ${(p) => p.theme.spacing.lg} ${(p) => p.theme.spacing.xxs}
+    ${(p) => p.theme.spacing.xs};
   background-color: ${(p) => p.theme.colors.grey[200]};
   border-radius: ${(p) => p.theme.radius.lg};
   margin-left: ${(p) => p.theme.spacing.xxs};
@@ -60,7 +60,7 @@ const CommentSection = styled.div`
 /**
  * Renders comments UI
  */
-const Comment = ({ comment, postId, postAuthor }) => {
+export const Comment = ({ comment, postId, postAuthor }) => {
   const [{ auth }] = useStore();
   const notification = useNotifications();
   const [deleteComment] = useMutation(DELETE_COMMENT, {
@@ -78,7 +78,9 @@ const Comment = ({ comment, postId, postAuthor }) => {
 
     // Delete notification after comment deletion
     if (auth.user.id !== postAuthor.id) {
-      const isNotified = postAuthor.notifications.find((n) => n.comment && n.comment.id === comment.id);
+      const isNotified = postAuthor.notifications.find(
+        (n) => n.comment && n.comment.id === comment.id
+      );
       notification.remove({
         notificationId: isNotified.id,
       });
@@ -125,5 +127,3 @@ Comment.propTypes = {
   postId: PropTypes.string.isRequired,
   postAuthor: PropTypes.object.isRequired,
 };
-
-export default Comment;

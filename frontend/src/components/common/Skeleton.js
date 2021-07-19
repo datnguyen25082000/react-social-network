@@ -17,7 +17,7 @@ const Container = styled.div`
 /**
  * Renders an UI block to inform a user, that content will be shown here after loading
  */
-const Skeleton = ({ count, width, height, inline, top, right, bottom, left, radius }) => {
+export const Skeleton = ({ count, width, height, inline, top, right, bottom, left, radius }) => {
   const loopSkeleton = () => {
     let skeleton = [];
     for (let i = 0; i < count; i++) {
@@ -55,5 +55,3 @@ Skeleton.propTypes = {
 Skeleton.defaultProps = {
   count: 1,
 };
-
-export default Skeleton;

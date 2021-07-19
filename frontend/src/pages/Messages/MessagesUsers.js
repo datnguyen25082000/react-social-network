@@ -1,18 +1,16 @@
-import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { NavLink, generatePath, withRouter } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
+import React, { useEffect } from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import { NavLink, generatePath, withRouter } from "react-router-dom";
+import { useQuery } from "@apollo/client";
 
-import { GET_CONVERSATIONS } from 'graphql/user';
-import { GET_NEW_CONVERSATIONS_SUBSCRIPTION } from 'graphql/messages';
+import { GET_CONVERSATIONS } from "graphql/user";
+import { GET_NEW_CONVERSATIONS_SUBSCRIPTION } from "graphql/messages";
 
-import Search from 'components/Search';
-import { PencilIcon } from 'components/icons';
-import { LoadingDots } from 'components/Loading';
-import Avatar from 'components/Avatar';
-
-import * as Routes from 'routes';
+import Search from "components/Search";
+import { PencilIcon } from "components/icons";
+import { LoadingDots,Avatar } from "components/common";
+import * as Routes from "routes";
 
 const Root = styled.div`
   width: 80px;
@@ -159,7 +157,7 @@ const MessagesUsers = ({ location, authUser }) => {
 
         // Merge conversations
         const conversations = newConversation;
-        delete conversations['receiverId'];
+        delete conversations["receiverId"];
         const mergedConversations = [newConversation, ...oldConversations];
 
         return { getConversations: mergedConversations };
@@ -186,7 +184,12 @@ const MessagesUsers = ({ location, authUser }) => {
       </HeadingContainer>
 
       <SearchContainer>
-        <Search location={location} backgroundColor="white" forMessage placeholder="Search message" />
+        <Search
+          location={location}
+          backgroundColor="white"
+          forMessage
+          placeholder="Search message"
+        />
       </SearchContainer>
 
       {loading && <LoadingDots top="xl" />}
@@ -197,7 +200,12 @@ const MessagesUsers = ({ location, authUser }) => {
             const unseen = !user.lastMessageSender && !user.seen;
 
             return (
-              <User key={user.id} activeClassName="selected" to={`/messages/${user.id}`} seen={unseen ? 0 : 1}>
+              <User
+                key={user.id}
+                activeClassName="selected"
+                to={`/messages/${user.id}`}
+                seen={unseen ? 0 : 1}
+              >
                 <span>
                   <Avatar image={user.image} size={50} />
                 </span>
@@ -210,7 +218,7 @@ const MessagesUsers = ({ location, authUser }) => {
                   </FullNameUnSeen>
 
                   <LastMessage>
-                    {user.lastMessageSender && 'You:'} {user.lastMessage}
+                    {user.lastMessageSender && "You:"} {user.lastMessage}
                   </LastMessage>
                 </Info>
               </User>

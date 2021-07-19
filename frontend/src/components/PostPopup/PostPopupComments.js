@@ -1,9 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import React from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components";
 
-import Comment from 'components/Comment';
-import { Spacing } from 'components/Layout';
+import { Comment,Spacing } from "components/common";
 
 const Root = styled.div`
   height: 100%;
@@ -17,7 +16,7 @@ const Root = styled.div`
 `;
 
 const Comments = styled.div`
-  max-height: ${(p) => (p.usedInModal ? '100%' : '350px')};
+  max-height: ${(p) => (p.usedInModal ? "100%" : "350px")};
   width: 100%;
   overflow-y: scroll;
   box-sizing: content-box;
@@ -33,7 +32,12 @@ const PostPopupComments = ({ comments, postId, postAuthor, usedInModal }) => (
 
     <Comments usedInModal={usedInModal}>
       {comments.map((comment) => (
-        <Comment key={comment.id} comment={comment} postId={postId} postAuthor={postAuthor} />
+        <Comment
+          key={comment.id}
+          comment={comment}
+          postId={postId}
+          postAuthor={postAuthor}
+        />
       ))}
     </Comments>
   </Root>

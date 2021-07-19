@@ -31,7 +31,7 @@ export default {
     black: '#000000',
     white: '#fff',
     success: '#34a853',
-    body: '#fcfbfe',
+    body: '#f2f2f2',
 
     primary: {
       light: '#7986cb',

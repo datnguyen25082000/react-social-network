@@ -1,17 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
-import styled from 'styled-components';
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
+import { useMutation } from "@apollo/client";
+import styled from "styled-components";
 
-import { A } from 'components/Text';
-import { Spacing } from 'components/Layout';
-import { Error } from 'components/Text';
-import { InputText, Button } from 'components/Form';
+import { A, Spacing, Error, InputText, Button } from "components/common";
 
-import { SIGN_IN } from 'graphql/user';
+import { SIGN_IN } from "graphql/user";
 
-import * as Routes from 'routes';
+import * as Routes from "routes";
 
 const Root = styled.div`
   display: flex;
@@ -40,12 +37,12 @@ const ForgotPassword = styled.div`
  * Sign In page
  */
 const SignIn = ({ history, location, refetch }) => {
-  const [values, setValues] = useState({ emailOrUsername: '', password: '' });
-  const [error, setError] = useState('');
+  const [values, setValues] = useState({ emailOrUsername: "", password: "" });
+  const [error, setError] = useState("");
   const [signin, { loading }] = useMutation(SIGN_IN);
 
   useEffect(() => {
-    setError('');
+    setError("");
   }, [location.pathname]);
 
   const handleChange = (e) => {
@@ -57,16 +54,16 @@ const SignIn = ({ history, location, refetch }) => {
     e.preventDefault();
 
     if (!emailOrUsername || !password) {
-      setError('All fields are required');
+      setError("All fields are required");
       return;
     }
 
-    setError('');
+    setError("");
     try {
       const response = await signin({
         variables: { input: { emailOrUsername, password } },
       });
-      localStorage.setItem('token', response.data.signin.token);
+      localStorage.setItem("token", response.data.signin.token);
       await refetch();
       history.push(Routes.HOME);
     } catch (error) {

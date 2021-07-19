@@ -1,31 +1,15 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { NavLink, generatePath } from 'react-router-dom';
-import SvgNotification from '../../../assets/svg/notification.svg';
+import React from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import { NavLink, generatePath } from "react-router-dom";
+import SvgNotification from "../../../assets/svg/notification.svg";
 
-import Avatar from 'components/Avatar';
-import { A } from 'components/Text';
+import { Avatar, A } from "components/common";
+import { timeAgo } from "utils/date";
 
-import { timeAgo } from 'utils/date';
+import * as Routes from "routes";
 
-import * as Routes from 'routes';
-
-const Root = styled.div`
-  position: absolute;
-  width: 100%;
-  max-height: 350px;
-  overflow-y: auto;
-  background-color: white;
-  right: 0;
-  top: 60px;
-  z-index: ${(p) => p.theme.zIndex.xl};
-  box-shadow: ${(p) => p.theme.shadows.sm};
-
-  @media (min-width: ${(p) => p.theme.screen.sm}) {
-    width: 280px;
-  }
-`;
+const Root = styled.div``;
 
 const Heading = styled.div`
   display: flex;
@@ -93,39 +77,50 @@ const CreatedAt = styled.div`
 const HeaderMessageDropdown = ({ messageRef, dropdownData }) => {
   return (
     <Root ref={messageRef}>
-      <Heading>
-        <Link
-          to={generatePath(Routes.MESSAGES, { userId: Routes.NEW_ID_VALUE })}
-          style={{
-            padding: 20,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'column',
-          }}
-        >
-          <img style={{ width: '60%', marginBottom: 20 }} src={SvgNotification} />
-          New Message
-        </Link>
-      </Heading>
+      {!dropdownData.length ? (
+        <Heading>
+          <Link
+            to={generatePath(Routes.MESSAGES, { userId: Routes.NEW_ID_VALUE })}
+            style={{
+              padding: 20,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
+            <img
+              style={{ width: "60%", marginBottom: 20 }}
+              src={SvgNotification}
+              alt="logo 1"
+            />
+            New Message
+          </Link>
+        </Heading>
+      ) : (
+        <>
+          {dropdownData.map((user) => (
+            <User
+              key={user.id}
+              to={generatePath(Routes.MESSAGES, { userId: user.id })}
+            >
+              <span>
+                <Avatar image={user.image} size={50} />
+              </span>
 
-      {dropdownData.map((user) => (
-        <User key={user.id} to={generatePath(Routes.MESSAGES, { userId: user.id })}>
-          <span>
-            <Avatar image={user.image} size={50} />
-          </span>
+              <Info>
+                <div>
+                  <FullName>{user.fullName}</FullName>
 
-          <Info>
-            <div>
-              <FullName>{user.fullName}</FullName>
+                  <LastMessage>{user.lastMessage}</LastMessage>
+                </div>
 
-              <LastMessage>{user.lastMessage}</LastMessage>
-            </div>
-
-            <CreatedAt>{timeAgo(user.lastMessageCreatedAt)}</CreatedAt>
-          </Info>
-        </User>
-      ))}
+                <CreatedAt>{timeAgo(user.lastMessageCreatedAt)}</CreatedAt>
+              </Info>
+            </User>
+          ))}
+        </>
+      )}
     </Root>
   );
 };

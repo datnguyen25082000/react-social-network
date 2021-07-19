@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { useApolloClient } from '@apollo/client';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import { useApolloClient } from "@apollo/client";
 
-import { UploadImageIcon } from 'components/icons';
-import { Loading } from 'components/Loading';
+import { UploadImageIcon } from "components/icons";
+import { Loading } from "components/common";
 
-import { MAX_USER_COVER_IMAGE_SIZE } from 'constants/ImageSize';
+import { MAX_USER_COVER_IMAGE_SIZE } from "constants/ImageSize";
 
-import { GET_AUTH_USER, GET_USER, UPLOAD_PHOTO } from 'graphql/user';
-import { GET_FOLLOWED_POSTS } from 'graphql/post';
+import { GET_AUTH_USER, GET_USER, UPLOAD_PHOTO } from "graphql/user";
+import { GET_FOLLOWED_POSTS } from "graphql/post";
 
-import defaultBackgroundImage from './background.jpg';
+import defaultBackgroundImage from "./background.jpg";
 
-import { useStore } from 'store';
+import { useStore } from "store";
 
-import { useGlobalMessage } from 'hooks/useGlobalMessage';
+import { useGlobalMessage } from "hooks/useGlobalMessage";
 
 const Root = styled.div`
   width: 100%;
@@ -67,12 +67,14 @@ const ProfileCoverUpload = ({ coverImagePublicId, coverImage, userId }) => {
     setLoading(true);
 
     const file = e.target.files[0];
-    e.target.value = '';
+    e.target.value = "";
 
     if (!file) return;
 
     if (file.size >= MAX_USER_COVER_IMAGE_SIZE) {
-      message.error(`File size should be less then ${MAX_USER_COVER_IMAGE_SIZE / 1000000}MB`);
+      message.error(
+        `File size should be less then ${MAX_USER_COVER_IMAGE_SIZE / 1000000}MB`
+      );
       setLoading(false);
       return;
     }

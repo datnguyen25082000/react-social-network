@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import {SvgAvatar} from '../assets/svg'
-import { UserIcon } from './icons';
+import {SvgAvatar} from '../../assets/svg'
 
 const Root = styled.div`
   width: ${(p) => (p.size ? `${p.size}px` : '30px')};
@@ -23,7 +22,7 @@ const Image = styled.img`
 /**
  * Component for rendering user's image
  */
-const Avatar = ({ size, image }) => (
+export const Avatar = ({ size, image }) => (
   <Root size={size}>{image ? <Image src={image} /> : <SvgAvatar width="100%" height="100%"/>}</Root>
 );
 
@@ -31,5 +30,3 @@ Avatar.propTypes = {
   size: PropTypes.number,
   image: PropTypes.string,
 };
-
-export default Avatar;

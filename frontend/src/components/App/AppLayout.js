@@ -5,7 +5,7 @@ import { Switch, Route } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Header from 'components/App/Header';
-import NotFound from 'components/NotFound';
+import {NotFound} from 'components/common';
 import SideBar from './SideBar';
 import UserSuggestions from './UserSuggestions';
 

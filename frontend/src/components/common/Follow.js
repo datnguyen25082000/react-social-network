@@ -35,7 +35,7 @@ const Button = styled.button`
 /**
  * Component for rendering follow button
  */
-const Follow = ({ user }) => {
+export const Follow = ({ user }) => {
   const [loading, setLoading] = useState(false);
   const [{ auth }] = useStore();
   const notification = useNotifications();
@@ -95,5 +95,3 @@ const Follow = ({ user }) => {
 Follow.propTypes = {
   user: PropTypes.object.isRequired,
 };
-
-export default Follow;

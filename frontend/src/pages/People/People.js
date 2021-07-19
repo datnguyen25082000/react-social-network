@@ -1,21 +1,23 @@
-import React, { Fragment } from 'react';
-import styled from 'styled-components';
+import React, { Fragment } from "react";
+import styled from "styled-components";
 
-import { Container } from 'components/Layout';
-import Skeleton from 'components/Skeleton';
-import { Loading } from 'components/Loading';
-import Empty from 'components/Empty';
-import InfiniteScroll from 'components/InfiniteScroll';
-import Head from 'components/Head';
-import PeopleCard from './PeopleCard';
+import {
+  Container,
+  Skeleton,
+  Loading,
+  Empty,
+  InfiniteScroll,
+  Head,
+} from "components/common";
+import PeopleCard from "./PeopleCard";
 
-import { GET_USERS } from 'graphql/user';
+import { GET_USERS } from "graphql/user";
 
-import { PEOPLE_PAGE_USERS_LIMIT } from 'constants/DataLimit';
+import { PEOPLE_PAGE_USERS_LIMIT } from "constants/DataLimit";
 
-import { useStore } from 'store';
+import { useStore } from "store";
 
-import { useQuery } from '@apollo/client';
+import { useQuery } from "@apollo/client";
 
 const Root = styled(Container)`
   margin-top: ${(p) => p.theme.spacing.lg};
@@ -52,9 +54,12 @@ const People = () => {
   const renderContent = () => {
     if (loading && networkStatus === 1) {
       return (
-        <PeopleContainer>
-          <Skeleton height={280} count={PEOPLE_PAGE_USERS_LIMIT} />
-        </PeopleContainer>
+        <>
+          <Loading top="lg" />
+          <PeopleContainer>
+            <Skeleton height={280} count={PEOPLE_PAGE_USERS_LIMIT} />
+          </PeopleContainer>
+        </>
       );
     }
 
@@ -70,7 +75,8 @@ const People = () => {
         fetchMore={fetchMore}
       >
         {(data) => {
-          const showNextLoading = loading && networkStatus === 3 && count !== data.length;
+          const showNextLoading =
+            loading && networkStatus === 3 && count !== data.length;
 
           return (
             <Fragment>
@@ -90,7 +96,7 @@ const People = () => {
 
   return (
     <Root maxWidth="md">
-      <Head title="Find new People" />
+      <Head />
 
       {renderContent()}
     </Root>

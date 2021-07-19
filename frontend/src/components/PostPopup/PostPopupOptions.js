@@ -1,10 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import React from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components";
 
-import { Spacing } from 'components/Layout';
-import Like from 'components/Like';
-import { PostCommentIcon } from 'components/icons';
+import { Spacing, Like } from "components/common";
+import { PostCommentIcon } from "components/icons";
 
 const Root = styled.div`
   border-top: 1px solid ${(p) => p.theme.colors.border.main};

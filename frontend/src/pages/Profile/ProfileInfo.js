@@ -1,24 +1,22 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { Link, generatePath } from 'react-router-dom';
-import { useSubscription } from '@apollo/client';
+import React from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import { Link, generatePath } from "react-router-dom";
+import { useSubscription } from "@apollo/client";
 
-import { IS_USER_ONLINE_SUBSCRIPTION } from 'graphql/user';
+import { IS_USER_ONLINE_SUBSCRIPTION } from "graphql/user";
 
-import { H1 } from 'components/Text';
-import { Spacing } from 'components/Layout';
-import Follow from 'components/Follow';
-import ProfileImageUpload from './ProfileImageUpload';
-import ProfileCoverUpload from './ProfileCoverUpload';
+import { H1,Spacing,Follow } from "components/common";
+import ProfileImageUpload from "./ProfileImageUpload";
+import ProfileCoverUpload from "./ProfileCoverUpload";
 
-import { ImNewspaper } from 'react-icons/im';
-import { BiDonateHeart } from 'react-icons/bi';
-import { FaUserCheck } from 'react-icons/fa';
+import { ImNewspaper } from "react-icons/im";
+import { BiDonateHeart } from "react-icons/bi";
+import { FaUserCheck } from "react-icons/fa";
 
-import { useStore } from 'store';
+import { useStore } from "store";
 
-import * as Routes from 'routes';
+import * as Routes from "routes";
 
 const Root = styled.div`
   display: flex;
@@ -114,10 +112,14 @@ const ProfileInfo = ({ user }) => {
   if (!loading && data) {
     isUserOnline = data.isUserOnline.isOnline;
   }
-
+  console.log('user', user);
   return (
     <Root>
-      <ProfileCoverUpload userId={user.id} coverImage={user.coverImage} coverImagePublicId={user.coverImagePublicId} />
+      <ProfileCoverUpload
+        userId={user.id}
+        coverImage={user.coverImage}
+        coverImagePublicId={user.coverImagePublicId}
+      />
 
       <ProfileImage>
         <ProfileImageUpload
@@ -137,7 +139,9 @@ const ProfileInfo = ({ user }) => {
               <Follow user={user} />
 
               <Spacing left="sm" />
-              <Message to={generatePath(Routes.MESSAGES, { userId: user.id })}>Message</Message>
+              <Message to={generatePath(Routes.MESSAGES, { userId: user.id })}>
+                Message
+              </Message>
             </FollowAndMessage>
           )}
         </FullName>

@@ -21,7 +21,7 @@ const ButtonContainer = styled.div`
 /**
  * Confirmation component, meant to be rendered inside Modal component
  */
-const Confirm = ({ title, onCancel, onOk, cancelText, okText }) => (
+export const Confirm = ({ title, onCancel, onOk, cancelText, okText }) => (
   <Root>
     <div>{title}</div>
 
@@ -52,5 +52,3 @@ Confirm.defaultProps = {
   cancelText: 'Cancel',
   okText: 'Delete',
 };
-
-export default Confirm;

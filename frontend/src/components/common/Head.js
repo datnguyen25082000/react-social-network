@@ -8,7 +8,7 @@ import SiteInfo from 'constants/SiteInfo.json';
  * Component that manages changes to document head
  * currently we are editing only title, but you can add meta description, image ...
  */
-const Head = ({ title }) => (
+export const Head = ({ title }) => (
   <Helmet>
     <title>{title}</title>
   </Helmet>
@@ -21,5 +21,3 @@ Head.propTypes = {
 Head.defaultProps = {
   title: SiteInfo.name,
 };
-
-export default Head;

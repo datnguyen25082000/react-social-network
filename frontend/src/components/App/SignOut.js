@@ -2,9 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useApolloClient } from '@apollo/client';
 import { withRouter } from 'react-router-dom';
-
-import { Button } from 'components/Form';
-
 import * as Routes from 'routes';
 
 import { useStore } from 'store';

@@ -3,7 +3,6 @@ import styled, { css } from 'styled-components';
 import { generatePath, useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import SignOut from 'components/App/SignOut';
-import { A } from 'components/Text';
 import { RiLogoutCircleRLine } from 'react-icons/ri';
 import { CgProfile } from 'react-icons/cg';
 import { AiFillSetting } from 'react-icons/ai';
@@ -13,33 +12,18 @@ import * as Routes from 'routes';
 import { useStore } from 'store';
 
 const Root = styled.div`
-  text-align: center;
-  width: 100%;
-  position: absolute;
-  background-color: white;
-  line-height: ${(p) => p.theme.spacing.md};
-  right: 0;
-  top: 60px;
-  z-index: ${(p) => p.theme.zIndex.xl};
-  box-shadow: ${(p) => p.theme.shadows.sm};
-  @media (min-width: ${(p) => p.theme.screen.sm}) {
-    width: 280px;
-  }
+
 `;
 
 const CSS = css`
   transition: background-color 0.1s;
   display: block;
-  padding: 10px 20px;
+  padding: 15px 20px;
 
   &:hover {
-    background-color: ${(p) => p.theme.colors.grey[200]};
+    background-color: ${(p) => p.theme.colors.grey[300]};
     color: ${(p) => p.theme.colors.text.secondary};
   }
-`;
-
-const Link = styled(A)`
-  ${CSS};
 `;
 
 const Item = styled.div`

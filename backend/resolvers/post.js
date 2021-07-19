@@ -1,5 +1,7 @@
 import { uploadToCloudinary, deleteFromCloudinary } from '../utils/cloudinary';
-
+const {
+  GraphQLUpload,
+} = require('graphql-upload');
 const Query = {
   /**
    * Gets all posts
@@ -108,6 +110,7 @@ const Query = {
 };
 
 const Mutation = {
+  // Upload: GraphQLUpload,
   /**
    * Creates a new post
    *
@@ -119,24 +122,20 @@ const Mutation = {
     if (!title && !image) {
       throw new Error('Post title or image is required.');
     }
-    console.log('image', image);
+   
     let imageUrl, imagePublicId;
     if (image) {
       const { createReadStream } = await image;
       const stream = createReadStream();
-      console.log('createReadStream', createReadStream);
-      console.log('stream', stream);
       const uploadImage = await uploadToCloudinary(stream, 'posts');
       
       if (!uploadImage.secure_url) {
         throw new Error('Something went wrong while uploading image to Cloudinary');
       }
-      console.log('uploadImage', uploadImage);
 
       imageUrl = uploadImage.secure_url;
       imagePublicId = uploadImage.public_id;
     }
-    console.log('imagePublicId', imagePublicId);
     const newPost = await new Post({
       title,
       image: imageUrl,
@@ -201,4 +200,4 @@ const Mutation = {
   },
 };
 
-export default { Query, Mutation };
+export default { Upload: GraphQLUpload, Query, Mutation };

@@ -1,13 +1,12 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { generatePath } from 'react-router-dom';
+import React from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import { generatePath } from "react-router-dom";
 
-import { Spacing } from 'components/Layout';
-import { A } from 'components/Text';
-import Avatar from 'components/Avatar';
-
-import * as Routes from 'routes';
+import { Spacing } from "components/common";
+import { A } from "components/common";
+import { Avatar } from "components/common";
+import * as Routes from "routes";
 
 const Root = styled.div`
   width: 100%;

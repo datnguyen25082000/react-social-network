@@ -5,7 +5,7 @@ import { get, uniqBy, setWith, clone } from 'lodash';
 /**
  * Component that adds Infinite scroll functionality to UI
  */
-const InfiniteScroll = ({ data, dataKey, fetchMore, variables, count, children }) => {
+export const InfiniteScroll = ({ data, dataKey, fetchMore, variables, count, children }) => {
   const handleScroll = useMemo(
     () => async () => {
       const loadMore = () => {
@@ -56,5 +56,3 @@ InfiniteScroll.propTypes = {
   variables: PropTypes.object.isRequired,
   children: PropTypes.func.isRequired,
 };
-
-export default InfiniteScroll;

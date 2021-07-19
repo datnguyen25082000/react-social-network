@@ -9,6 +9,7 @@ import CommentSchema from './Comment';
 import NotificationSchema from './Notification';
 
 const schema = gql`
+  scalar Upload
   type Query {
     _empty: String
   }

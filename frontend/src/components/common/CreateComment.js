@@ -25,7 +25,7 @@ const Form = styled.form`
 /**
  * Creates a comment for a post
  */
-const CreateComment = ({ post, focus }) => {
+export const CreateComment = ({ post, focus }) => {
   const [{ auth }] = useStore();
   const notification = useNotifications();
   const [comment, setComment] = useState('');
@@ -99,4 +99,3 @@ CreateComment.propTypes = {
   focus: PropTypes.bool,
 };
 
-export default CreateComment;

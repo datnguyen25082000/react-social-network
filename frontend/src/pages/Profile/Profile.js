@@ -1,20 +1,22 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
-import styled from 'styled-components';
+import React from "react";
+import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import styled from "styled-components";
 
-import Skeleton from 'components/Skeleton';
-import { Container, Spacing } from 'components/Layout';
-import ProfileInfo from './ProfileInfo';
-import CreatePost from 'components/CreatePost';
-import ProfilePosts from './ProfilePosts';
-import NotFound from 'components/NotFound';
-import Head from 'components/Head';
-
-import { GET_USER } from 'graphql/user';
-
-import { useStore } from 'store';
+import {
+  Skeleton,
+  Container,
+  Spacing,
+  CreatePost,
+  NotFound,
+  Loading,
+  Head,
+} from "components/common";
+import ProfileInfo from "./ProfileInfo";
+import ProfilePosts from "./ProfilePosts";
+import { GET_USER } from "graphql/user";
+import { useStore } from "store";
 
 const Root = styled.div`
   width: 100%;
@@ -24,7 +26,6 @@ const Root = styled.div`
     padding: 0;
   }
 `;
-
 /**
  * User Profile Page
  */
@@ -45,6 +46,7 @@ const Profile = ({ match }) => {
               <Skeleton height={82} />
             </Spacing>
           </Container>
+          <Loading top="lg" />
         </Container>
       );
     }
@@ -68,7 +70,7 @@ const Profile = ({ match }) => {
 
   return (
     <Root>
-      <Head title={username} />
+      <Head />
 
       {renderContent()}
     </Root>
