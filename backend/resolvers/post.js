@@ -1,7 +1,9 @@
-import { uploadToCloudinary, deleteFromCloudinary } from '../utils/cloudinary';
-const {
-  GraphQLUpload,
-} = require('graphql-upload');
+import { uploadToCloudinary, deleteFromCloudinary, uploadVideoToCloudinary } from "../utils/cloudinary";
+const { GraphQLUpload } = require("graphql-upload");
+const fs = require("fs");
+
+import { v4 as uuidv4 } from "uuid";
+
 const Query = {
   /**
    * Gets all posts
@@ -17,25 +19,30 @@ const Query = {
     const postsCount = await Post.find(query).countDocuments();
     const allPosts = await Post.find(query)
       .populate({
-        path: 'author',
+        path: "author",
         populate: [
-          { path: 'following' },
-          { path: 'followers' },
+          { path: "following" },
+          { path: "followers" },
           {
-            path: 'notifications',
-            populate: [{ path: 'author' }, { path: 'follow' }, { path: 'like' }, { path: 'comment' }],
+            path: "notifications",
+            populate: [
+              { path: "author" },
+              { path: "follow" },
+              { path: "like" },
+              { path: "comment" },
+            ],
           },
         ],
       })
-      .populate('likes')
+      .populate("likes")
       .populate({
-        path: 'comments',
-        options: { sort: { createdAt: 'desc' } },
-        populate: { path: 'author' },
+        path: "comments",
+        options: { sort: { createdAt: "desc" } },
+        populate: { path: "author" },
       })
       .skip(skip)
       .limit(limit)
-      .sort({ createdAt: 'desc' });
+      .sort({ createdAt: "desc" });
 
     return { posts: allPosts, count: postsCount };
   },
@@ -49,7 +56,9 @@ const Query = {
   getFollowedPosts: async (root, { userId, skip, limit }, { Post, Follow }) => {
     // Find user ids, that current user follows
     const userFollowing = [];
-    const follow = await Follow.find({ follower: userId }, { _id: 0 }).select('user');
+    const follow = await Follow.find({ follower: userId }, { _id: 0 }).select(
+      "user"
+    );
     follow.map((f) => userFollowing.push(f.user));
 
     // Find user posts and followed posts by using userFollowing ids array
@@ -59,25 +68,30 @@ const Query = {
     const followedPostsCount = await Post.find(query).countDocuments();
     const followedPosts = await Post.find(query)
       .populate({
-        path: 'author',
+        path: "author",
         populate: [
-          { path: 'following' },
-          { path: 'followers' },
+          { path: "following" },
+          { path: "followers" },
           {
-            path: 'notifications',
-            populate: [{ path: 'author' }, { path: 'follow' }, { path: 'like' }, { path: 'comment' }],
+            path: "notifications",
+            populate: [
+              { path: "author" },
+              { path: "follow" },
+              { path: "like" },
+              { path: "comment" },
+            ],
           },
         ],
       })
-      .populate('likes')
+      .populate("likes")
       .populate({
-        path: 'comments',
-        options: { sort: { createdAt: 'desc' } },
-        populate: { path: 'author' },
+        path: "comments",
+        options: { sort: { createdAt: "desc" } },
+        populate: { path: "author" },
       })
       .skip(skip)
       .limit(limit)
-      .sort({ createdAt: 'desc' });
+      .sort({ createdAt: "desc" });
 
     return { posts: followedPosts, count: followedPostsCount };
   },
@@ -89,21 +103,26 @@ const Query = {
   getPost: async (root, { id }, { Post }) => {
     const post = await Post.findById(id)
       .populate({
-        path: 'author',
+        path: "author",
         populate: [
-          { path: 'following' },
-          { path: 'followers' },
+          { path: "following" },
+          { path: "followers" },
           {
-            path: 'notifications',
-            populate: [{ path: 'author' }, { path: 'follow' }, { path: 'like' }, { path: 'comment' }],
+            path: "notifications",
+            populate: [
+              { path: "author" },
+              { path: "follow" },
+              { path: "like" },
+              { path: "comment" },
+            ],
           },
         ],
       })
-      .populate('likes')
+      .populate("likes")
       .populate({
-        path: 'comments',
+        path: "comments",
         options: { sort: { createdAt: -1 } },
-        populate: { path: 'author' },
+        populate: { path: "author" },
       });
     return post;
   },
@@ -118,24 +137,49 @@ const Mutation = {
    * @param {string} image
    * @param {string} authorId
    */
-  createPost: async (root, { input: { title, image, authorId } }, { Post, User }) => {
+  createPost: async (
+    root,
+    { input: { title, image, authorId } },
+    { Post, User }
+  ) => {
     if (!title && !image) {
-      throw new Error('Post title or image is required.');
+      throw new Error("Post title or image is required.");
     }
-   
-    let imageUrl, imagePublicId;
+
+    var imageUrl, imagePublicId;
+
     if (image) {
-      const { createReadStream } = await image;
-      const stream = createReadStream();
-      const uploadImage = await uploadToCloudinary(stream, 'posts');
-      
-      if (!uploadImage.secure_url) {
-        throw new Error('Something went wrong while uploading image to Cloudinary');
+      const { createReadStream, filename, mimetype, encoding } = await image;
+
+      if (mimetype === "video/mp4") {
+        const { createReadStream } = await image;
+        const stream = createReadStream();
+        const uploadImage = await uploadVideoToCloudinary(stream, "posts");
+
+        if (!uploadImage.secure_url) {
+          throw new Error(
+            "Something went wrong while uploading image to Cloudinary"
+          );
+        }
+        imageUrl = uploadImage.secure_url;
+        imagePublicId = uploadImage.public_id;
       }
 
-      imageUrl = uploadImage.secure_url;
-      imagePublicId = uploadImage.public_id;
+      if (mimetype !== "video/mp4") {
+        const { createReadStream } = await image;
+        const stream = createReadStream();
+        const uploadImage = await uploadToCloudinary(stream, "posts");
+
+        if (!uploadImage.secure_url) {
+          throw new Error(
+            "Something went wrong while uploading image to Cloudinary"
+          );
+        }
+        imageUrl = uploadImage.secure_url;
+        imagePublicId = uploadImage.public_id;
+      }
     }
+
     const newPost = await new Post({
       title,
       image: imageUrl,
@@ -143,7 +187,10 @@ const Mutation = {
       author: authorId,
     }).save();
 
-    await User.findOneAndUpdate({ _id: authorId }, { $push: { posts: newPost.id } });
+    await User.findOneAndUpdate(
+      { _id: authorId },
+      { $push: { posts: newPost.id } }
+    );
 
     return newPost;
   },
@@ -153,13 +200,19 @@ const Mutation = {
    * @param {string} id
    * @param {imagePublicId} id
    */
-  deletePost: async (root, { input: { id, imagePublicId } }, { Post, Like, User, Comment, Notification }) => {
+  deletePost: async (
+    root,
+    { input: { id, imagePublicId } },
+    { Post, Like, User, Comment, Notification }
+  ) => {
     // Remove post image from cloudinary, if imagePublicId is present
     if (imagePublicId) {
       const deleteImage = await deleteFromCloudinary(imagePublicId);
 
-      if (deleteImage.result !== 'ok') {
-        throw new Error('Something went wrong while deleting image from Cloudinary');
+      if (deleteImage.result !== "ok") {
+        throw new Error(
+          "Something went wrong while deleting image from Cloudinary"
+        );
       }
     }
 
@@ -167,7 +220,10 @@ const Mutation = {
     const post = await Post.findByIdAndRemove(id);
 
     // Delete post from authors (users) posts collection
-    await User.findOneAndUpdate({ _id: post.author }, { $pull: { posts: post.id } });
+    await User.findOneAndUpdate(
+      { _id: post.author },
+      { $pull: { posts: post.id } }
+    );
 
     // Delete post likes from likes collection
     await Like.find({ post: post.id }).deleteMany();

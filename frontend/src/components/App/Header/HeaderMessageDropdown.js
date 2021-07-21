@@ -41,7 +41,7 @@ const User = styled(NavLink)`
   border-top: 1px solid ${(p) => p.theme.colors.border.main};
 
   &:hover {
-    background-color: ${(p) => p.theme.colors.grey[200]};
+    background-color: ${(p) => p.theme.colors.grey[300]};
   }
 `;
 

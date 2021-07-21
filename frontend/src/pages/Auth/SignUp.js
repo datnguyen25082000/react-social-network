@@ -132,23 +132,27 @@ const SignUp = ({ history, refetch }) => {
 
       <Welcome>
         <div>
-          <Heading color="white">
-            Connect with friends and the world around you.
-          </Heading>
+          <Heading color="white">Connect - Share - Experience</Heading>
         </div>
 
-        <p>See photos and updates from your friends.</p>
-        <p>Follow your interests.</p>
-        <p>Hear what people are talking about.</p>
+        <p>
+          Connect with all people around the world: see photos, videos, status
+          from your friends.
+        </p>
+        <p>Share about yourself.</p>
+        <p>
+          Experience interesting and useful features only in this application.
+        </p>
       </Welcome>
 
       <Form>
         <Spacing bottom="md">
-          <H1>Create Account</H1>
+          <H1>REGISTER</H1>
         </Spacing>
 
         <form onSubmit={(e) => handleSubmit(e, signup)}>
           <InputText
+
             type="text"
             name="fullName"
             values={fullName}
@@ -156,7 +160,7 @@ const SignUp = ({ history, refetch }) => {
             placeholder="Full name"
             borderColor="white"
           />
-          <Spacing top="xs" bottom="xs">
+          <Spacing top="sm" bottom="sm">
             <InputText
               type="text"
               name="email"
@@ -164,6 +168,7 @@ const SignUp = ({ history, refetch }) => {
               onChange={handleChange}
               placeholder="Email"
               borderColor="white"
+              marginTop={20}
             />
           </Spacing>
           <InputText
@@ -173,8 +178,9 @@ const SignUp = ({ history, refetch }) => {
             onChange={handleChange}
             placeholder="Username"
             borderColor="white"
+            marginTop={20}
           />
-          <Spacing top="xs" bottom="xs">
+          <Spacing top="sm" bottom="xs">
             <InputText
               type="password"
               name="password"

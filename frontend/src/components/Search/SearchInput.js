@@ -1,8 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import React from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components";
 
-import { SearchIcon } from 'components/icons';
+import { SearchIcon } from "components/icons";
 
 const Root = styled.div`
   width: 100%;
@@ -22,11 +22,15 @@ const Input = styled.input`
   width: 100%;
   border: 0;
   border-radius: ${(p) => p.theme.radius.md};
-  padding-left: ${(p) => (p.hideIcon ? p.theme.spacing.xs : p.theme.spacing.lg)};
+  padding-left: ${(p) =>
+    p.hideIcon ? p.theme.spacing.xs : p.theme.spacing.lg};
   padding-right: ${(p) => p.theme.spacing.lg};
   color: ${(p) => p.theme.colors.text.main};
   font-size: ${(p) => p.theme.font.size.xs};
-  background-color: ${(p) => (p.backgroundColor ? p.theme.colors[p.backgroundColor] : p.theme.colors.grey[200])};
+  background-color: ${(p) =>
+    p.backgroundColor
+      ? p.theme.colors[p.backgroundColor]
+      : p.theme.colors.grey[300]};
   transition: all 0.4s;
 
   &:focus {

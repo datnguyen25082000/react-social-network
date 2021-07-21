@@ -1,5 +1,5 @@
-import cloudinary from 'cloudinary';
-import { v4 as uuid } from 'uuid';
+import cloudinary from "cloudinary";
+import { v4 as uuid } from "uuid";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -16,16 +16,56 @@ cloudinary.config({
  */
 export const uploadToCloudinary = async (stream, folder, imagePublicId) => {
   // if imagePublicId param is presented we should overwrite the image
-  const options = imagePublicId ? { public_id: imagePublicId, overwrite: true } : { public_id: `${folder}/${uuid()}` };
+  const options = imagePublicId
+    ? { public_id: imagePublicId, overwrite: true }
+    : { public_id: `${folder}/${uuid()}` };
 
   return new Promise((resolve, reject) => {
-    const streamLoad = cloudinary.v2.uploader.upload_stream(options, (error, result) => {
-      if (result) {
-        resolve(result);
-      } else {
-        reject(error);
+    const streamLoad = cloudinary.v2.uploader.upload_stream(
+      options,
+      (error, result) => {
+        if (result) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
       }
-    });
+    );
+
+    stream.pipe(streamLoad);
+  });
+};
+
+export const uploadVideoToCloudinary = async (
+  stream,
+  folder,
+  imagePublicId
+) => {
+  // if imagePublicId param is presented we should overwrite the image
+  const options = imagePublicId
+    ? {
+        resource_type: "video",
+        public_id: imagePublicId,
+        overwrite: true,
+        chunk_size: 6000000,
+      }
+    : {
+        resource_type: "video",
+        public_id: `${folder}/${uuid()}`,
+        chunk_size: 6000000,
+      };
+
+  return new Promise((resolve, reject) => {
+    const streamLoad = cloudinary.v2.uploader.upload_stream(
+      options,
+      (error, result) => {
+        if (result) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    );
 
     stream.pipe(streamLoad);
   });

@@ -69,9 +69,12 @@ export const Spacing = styled.div`
 export const Overlay = styled.div`
   position: fixed;
   width: 100%;
+  height: 100vh;
   top: 0;
   bottom: 0;
   left: 0;
+  overflow: hidden;
+  right: 0;
   z-index: ${(p) => p.theme.zIndex.md};
   background-color: rgba(0, 0, 0, ${(p) => (p.transparency ? p.transparency : '0.8')});
 `;

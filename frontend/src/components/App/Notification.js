@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import { generatePath } from "react-router-dom";
+import { generatePath, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { useApolloClient } from "@apollo/client";
 
@@ -16,6 +16,7 @@ import * as Routes from "routes";
 
 const NotificationItem = styled.div`
   display: flex;
+  cursor: pointer;
   flex-direction: row;
   align-items: center;
   padding: ${(p) => p.theme.spacing.xs};
@@ -25,6 +26,9 @@ const NotificationItem = styled.div`
 
   &:last-child {
     border-bottom: 0;
+  }
+  &:hover {
+    background-color: #f1f1f1;
   }
 `;
 
@@ -73,10 +77,11 @@ const Notification = ({ notification, close }) => {
   const [{ auth }] = useStore();
   const client = useApolloClient();
   const ref = React.useRef(null);
-
+  const history = useHistory();
   useClickOutside(ref, close);
 
   useEffect(() => {
+    console.log("notification", notification);
     const updateNotificationSeen = async () => {
       try {
         await client.mutate({
@@ -99,7 +104,17 @@ const Notification = ({ notification, close }) => {
   }
 
   return (
-    <NotificationItem ref={ref}>
+    <NotificationItem
+      ref={ref}
+      onClick={() => {
+        if (notification.like)
+          history.push(`/post/${notification.like.post.id}`);
+        if (notification.follow)
+          history.push(`/${notification.author.username}`);
+        if (notification.comment)
+          history.push(`/post/${notification.comment.post.id}`);
+      }}
+    >
       <A
         to={generatePath(Routes.USER_PROFILE, {
           username: notification.author.username,
@@ -118,22 +133,22 @@ const Notification = ({ notification, close }) => {
 
           {notification.like && (
             <Action>
-              likes your photo
+              likes your post
               <A
                 to={generatePath(Routes.POST, {
                   id: notification.like.post.id,
                 })}
               >
-                <PostImage>
+                {/* <PostImage>
                   <Image src={notification.like.post.image} />
-                </PostImage>
+                </PostImage> */}
               </A>
             </Action>
           )}
 
           {notification.comment && (
             <Action>
-              commented on your photo
+              commented on your post
               <A
                 to={generatePath(Routes.POST, {
                   id: notification.comment.post.id,

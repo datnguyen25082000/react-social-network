@@ -9,8 +9,9 @@ import { GET_NEW_CONVERSATIONS_SUBSCRIPTION } from "graphql/messages";
 
 import Search from "components/Search";
 import { PencilIcon } from "components/icons";
-import { LoadingDots,Avatar } from "components/common";
+import { LoadingDots, Avatar } from "components/common";
 import * as Routes from "routes";
+import MessagesUserAvatar from "./MessagesUserAvatar";
 
 const Root = styled.div`
   width: 80px;
@@ -49,7 +50,7 @@ const Heading = styled.h3`
 const NewMessage = styled(NavLink)`
   width: 40px;
   height: 40px;
-  background-color: ${(p) => p.theme.colors.grey[200]};
+  background-color: ${(p) => p.theme.colors.grey[300]};
   border-radius: 50%;
   display: flex;
   flex-direction: row;
@@ -69,69 +70,6 @@ const SearchContainer = styled.div`
 const UserContainer = styled.div`
   margin-top: ${(p) => p.theme.spacing.sm};
   padding: 0 ${(p) => p.theme.spacing.xxs};
-`;
-
-const User = styled(NavLink)`
-  width: 100%;
-  padding: ${(p) => p.theme.spacing.xxs} ${(p) => p.theme.spacing.xxs};
-  margin-bottom: ${(p) => p.theme.spacing.xxs};
-  border-radius: ${(p) => p.theme.radius.md};
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  text-decoration: none;
-  color: ${(p) => p.theme.colors.text.primary};
-
-  @media (max-width: ${(p) => p.theme.screen.lg}) {
-    ${(p) =>
-      !p.seen &&
-      `
-        background-color: ${p.theme.colors.primary.light};
-      `};
-  }
-
-  &.selected {
-    background-color: ${(p) => p.theme.colors.grey[200]};
-  }
-`;
-
-const Info = styled.div`
-  width: 100%;
-  display: none;
-  padding: 0 ${(p) => p.theme.spacing.xs};
-
-  @media (min-width: ${(p) => p.theme.screen.lg}) {
-    display: block;
-  }
-`;
-
-const FullNameUnSeen = styled.div`
-  width: 100%;
-  font-size: ${(p) => p.theme.font.size.sm};
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const FullName = styled.div`
-  text-overflow: ellipsis;
-  width: 100%;
-`;
-
-const UnSeen = styled.div`
-  width: 8px;
-  height: 8px;
-  background-color: ${(p) => p.theme.colors.primary.light};
-  border-radius: 50%;
-`;
-
-const LastMessage = styled.div`
-  margin-top: ${(p) => p.theme.spacing.xxs};
-  font-size: ${(p) => p.theme.font.size.xxs};
-  color: ${(p) => p.theme.colors.grey[500]};
-  text-overflow: ellipsis;
 `;
 
 /**
@@ -199,30 +137,7 @@ const MessagesUsers = ({ location, authUser }) => {
           {data.getConversations.map((user) => {
             const unseen = !user.lastMessageSender && !user.seen;
 
-            return (
-              <User
-                key={user.id}
-                activeClassName="selected"
-                to={`/messages/${user.id}`}
-                seen={unseen ? 0 : 1}
-              >
-                <span>
-                  <Avatar image={user.image} size={50} />
-                </span>
-
-                <Info>
-                  <FullNameUnSeen>
-                    <FullName>{user.fullName}</FullName>
-
-                    {unseen && <UnSeen />}
-                  </FullNameUnSeen>
-
-                  <LastMessage>
-                    {user.lastMessageSender && "You:"} {user.lastMessage}
-                  </LastMessage>
-                </Info>
-              </User>
-            );
+            return <MessagesUserAvatar user={user} unseen={unseen} />;
           })}
         </UserContainer>
       )}

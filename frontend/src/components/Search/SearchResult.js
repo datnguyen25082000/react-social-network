@@ -24,7 +24,7 @@ const StyledA = styled(A)`
   display: block;
 
   &:hover {
-    background-color: ${(p) => p.theme.colors.grey[200]};
+    background-color: ${(p) => p.theme.colors.grey[300]};
   }
 `;
 

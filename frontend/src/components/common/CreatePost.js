@@ -1,13 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import styled from "styled-components";
-
-import { Spacing, Overlay, Container } from "components/common";
-import { Error } from "components/common";
-import { Button } from "components/common";
-import { Avatar } from "components/common";
+import "video-react/dist/video-react.css"; // import css
+import { Player } from "video-react";
+import {
+  Spacing,
+  Overlay,
+  Container,
+  Error,
+  Button,
+  Avatar,
+  Modal,
+} from "components/common";
 
 import PostImageUpload from "pages/Home/PostImageUpload";
+import { CloseIcon } from "components/icons";
 
 import { GET_FOLLOWED_POSTS, CREATE_POST } from "graphql/post";
 import { GET_AUTH_USER, GET_USER_POSTS } from "graphql/user";
@@ -19,8 +26,9 @@ import { HOME_PAGE_POSTS_LIMIT } from "constants/DataLimit";
 import { MAX_POST_IMAGE_SIZE } from "constants/ImageSize";
 
 import { useGlobalMessage } from "hooks/useGlobalMessage";
+import PostVideoUpload from "pages/Home/PostVideoUpload";
 
-const Root = styled(props => <Container {...props} />)`
+const Root = styled((props) => <Container {...props} />)`
   border: 0;
   border: 1px solid ${(p) => p.theme.colors.border.main};
 `;
@@ -74,6 +82,25 @@ const Buttons = styled.div`
   flex-direction: row;
 `;
 
+const ContainerModal = styled.div`
+  background-color: #fff;
+  padding: 20px 40px;
+  @media (min-width: ${(p) => p.theme.screen.md}) {
+    width: 600px;
+  }
+
+  @media (min-width: ${(p) => parseInt(p.theme.screen.lg, 10) + 20 + "px"}) {
+    width: 800px;
+  }
+`;
+const DeleteButton = styled.button`
+  cursor: pointer;
+  background-color: #aaa;
+  border: 0;
+  outline: 0;
+  margin-left: 20px;
+  border-radius: 10px;
+`;
 /**
  * Component for creating a post
  */
@@ -81,6 +108,7 @@ export const CreatePost = () => {
   const [{ auth }] = useStore();
   const [title, setTitle] = useState("");
   const [image, setImage] = useState("");
+  const [video, setVideo] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [error, setError] = useState("");
   const [apiError, setApiError] = useState(false);
@@ -112,10 +140,20 @@ export const CreatePost = () => {
     setImage("");
     setIsFocused(false);
     setError("");
+    setVideo("");
     setApiError(false);
   };
 
-  const handleOnFocus = () => setIsFocused(true);
+  const handlePostVideoUpload = (e) => {
+    const file = e.target.files[0];
+    console.log("change", file);
+    if (!file) return;
+
+    setVideo(file);
+
+    setIsFocused(true);
+    e.target.value = null;
+  };
 
   const handlePostImageUpload = (e) => {
     const file = e.target.files[0];
@@ -140,8 +178,11 @@ export const CreatePost = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const fileUpload = image || video;
       await createPost({
-        variables: { input: { title, image, authorId: auth.user.id } },
+        variables: {
+          input: { title, image: fileUpload, authorId: auth.user.id },
+        },
       });
       handleReset();
     } catch (error) {
@@ -153,69 +194,116 @@ export const CreatePost = () => {
 
   return (
     <>
-      {isFocused && <Overlay onClick={handleReset} />}
+      {/* {isFocused && <Overlay onClick={handleReset} />} */}
 
       <Root
-        zIndex={isFocused ? "md" : "xs"}
         color="white"
         radius="sm"
         padding="sm"
+        zIndex={isFocused ? "md" : "xs"}
       >
-        <form onSubmit={handleSubmit}>
-          <Wrapper>
-            <Avatar image={auth.user.image} size={40} />
+        <Wrapper>
+          <Avatar image={auth.user.image} size={40} />
 
-            <Textarea
-              type="textarea"
-              name="title"
-              focus={isFocused}
-              value={title}
-              onFocus={handleOnFocus}
-              onChange={handleTitleChange}
-              placeholder="Add a post"
-            />
+          <Textarea
+            onClick={() => {
+              setIsFocused(true);
+            }}
+            placeholder="Add a post"
+          />
 
-            {!isFocused && (
-              <PostImageUpload handleChange={handlePostImageUpload} />
-            )}
-          </Wrapper>
-
-          {image && (
-            <Spacing bottom="sm">
-              <ImagePreviewContainer>
-                <ImagePreview src={URL.createObjectURL(image)} />
-              </ImagePreviewContainer>
-            </Spacing>
+          {!isFocused && (
+            <PostImageUpload handleChange={handlePostImageUpload} />
           )}
+        </Wrapper>
+      </Root>
+      <Modal open={isFocused} onClose={handleReset}>
+        <form onSubmit={handleSubmit}>
+          <ContainerModal>
+            <Wrapper>
+              <Avatar image={auth.user.image} size={40} />
 
-          {isFocused && (
-            <Options>
-              <PostImageUpload
-                label="Photo"
-                handleChange={handlePostImageUpload}
+              <Textarea
+                type="textarea"
+                name="title"
+                focus={isFocused}
+                value={title}
+                onChange={handleTitleChange}
+                placeholder="Add a post"
               />
 
-              <Buttons>
-                <Button text type="button" onClick={handleReset}>
-                  Cancel
-                </Button>
-                <Button disabled={isShareDisabled} type="submit">
-                  Share
-                </Button>
-              </Buttons>
-            </Options>
-          )}
+              {!isFocused && (
+                <PostImageUpload handleChange={handlePostImageUpload} />
+              )}
+            </Wrapper>
 
-          {apiError ||
-            (error && (
-              <Spacing top="xs" bottom="sm">
-                <Error size="xs">
-                  {apiError ? "Something went wrong, please try again." : error}
-                </Error>
+            {image && (
+              <Spacing bottom="sm">
+                <ImagePreviewContainer>
+                  <ImagePreview src={URL.createObjectURL(image)} />
+                </ImagePreviewContainer>
               </Spacing>
-            ))}
+            )}
+            {video && (
+              <div
+                style={{
+                  display: "flex",
+                  alignContent: "center",
+                  backgroundColor: "#eb5b34",
+                  color: "#fff",
+                  borderRadius: 20,
+                  width: "fit-content",
+                  padding: 10,
+                }}
+              >
+                <span>{video.name}</span>
+                <DeleteButton
+                  onClick={() => {
+                    setVideo("");
+                  }}
+                >
+                  <CloseIcon width="10" />
+                </DeleteButton>
+              </div>
+            )}
+
+            {isFocused && (
+              <Options>
+                <div style={{ display: "flex" }}>
+                  <PostImageUpload
+                    label="Photo"
+                    handleChange={handlePostImageUpload}
+                  />
+                  <PostVideoUpload
+                    label="Video"
+                    handleChange={handlePostVideoUpload}
+                  />
+                </div>
+
+                <Buttons>
+                  <Button text type="button" onClick={handleReset}>
+                    Cancel
+                  </Button>
+                  <Button disabled={isShareDisabled} type="submit">
+                    Share
+                  </Button>
+                </Buttons>
+              </Options>
+            )}
+
+            {apiError ||
+              (error && (
+                <Spacing top="xs" bottom="sm">
+                  <Error size="xs">
+                    {apiError
+                      ? "Something went wrong, please try again."
+                      : error}
+                  </Error>
+                </Spacing>
+              ))}
+          </ContainerModal>
         </form>
-      </Root>
+      </Modal>
     </>
   );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { generatePath, withRouter, Link } from "react-router-dom";
@@ -75,7 +75,7 @@ const Online = styled.div`
  */
 const MessagesChatHeading = ({ location, match, chatUser }) => {
   const [{ auth }] = useStore();
-
+  const [localIsOnline, setLocalIsOnline] = useState(chatUser?.isOnline || "");
   const { data, loading } = useSubscription(IS_USER_ONLINE_SUBSCRIPTION, {
     variables: {
       authUserId: auth.user.id,
@@ -84,10 +84,9 @@ const MessagesChatHeading = ({ location, match, chatUser }) => {
     skip: !chatUser,
   });
 
-  // Update user's isOnline field in real time
-  if (!loading && data && chatUser) {
-    chatUser.isOnline = data.isUserOnline.isOnline;
-  }
+  useEffect(() => {
+    if (data) setLocalIsOnline(data?.isUserOnline?.isOnline);
+  }, [data]);
 
   if (match.params.userId === Routes.NEW_ID_VALUE || !chatUser) {
     return (
@@ -120,7 +119,7 @@ const MessagesChatHeading = ({ location, match, chatUser }) => {
           <Info>
             <FullName>{chatUser.fullName}</FullName>
 
-            {chatUser.isOnline && <Online />}
+            {localIsOnline && <Online />}
           </Info>
         </User>
       </Root>

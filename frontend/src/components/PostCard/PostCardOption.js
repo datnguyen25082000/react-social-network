@@ -33,7 +33,7 @@ const StyledButton = styled(Button)`
   }
 
   &:hover {
-    background-color: ${(p) => p.theme.colors.grey[200]};
+    background-color: ${(p) => p.theme.colors.grey[300]};
     color: ${(p) => p.theme.colors.text.primary};
   }
 `;

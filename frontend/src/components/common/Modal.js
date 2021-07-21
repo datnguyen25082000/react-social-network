@@ -1,16 +1,17 @@
-import React from 'react';
-import styled from 'styled-components';
-import PropTypes from 'prop-types';
+import React, { useEffect } from "react";
+import styled from "styled-components";
+import PropTypes from "prop-types";
 
-import {Confirm} from './Confirm';
-import { Overlay } from './Layout';
+import { Confirm } from "./Confirm";
+import { Overlay } from "./Layout";
 
 const Root = styled.div`
   position: fixed;
-  top: ${(p) => p.theme.spacing.sm};
   left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
   z-index: ${(p) => p.theme.zIndex.lg};
   display: flex;
   flex-direction: row;
@@ -27,13 +28,26 @@ const Root = styled.div`
  * Main component for rendering Modals
  */
 export const Modal = ({ children, open, onClose, type, ...otherProps }) => {
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflowY = "scroll";
+      document.body.style.position = "fixed";
+      document.body.style.width = "100%";
+    } else {
+      document.body.style.overflow = ""
+      document.body.style.position = 'relative'
+    };
+  }, [open]);
+
   if (!open) return null;
 
   return (
     <Root>
-      <Overlay onClick={onClose} />
+      <Overlay onClick={onClose}></Overlay>
 
-      {type === 'confirm' ? <Confirm {...otherProps} /> : children}
+      <div style={{ zIndex: "100000" }}>
+        {type === "confirm" ? <Confirm {...otherProps} /> : children}
+      </div>
     </Root>
   );
 };
@@ -42,5 +56,5 @@ Modal.propTypes = {
   children: PropTypes.node,
   open: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
-  type: PropTypes.oneOf(['', 'confirm']),
+  type: PropTypes.oneOf(["", "confirm"]),
 };

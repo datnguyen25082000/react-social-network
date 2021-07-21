@@ -16,6 +16,7 @@ const Root = styled.div`
   align-items: space-between;
   font-size: ${(p) => p.theme.font.size.xxs};
   margin-top: ${(p) => p.theme.spacing.sm};
+  padding-top: 40px;
 `;
 
 const InputContainer = styled(Spacing)`
@@ -31,6 +32,11 @@ const ForgotPassword = styled.div`
   font-size: ${(p) => p.theme.font.size.xxs};
   margin-top: ${(p) => p.theme.spacing.xxs};
   color: ${(p) => p.theme.colors.white};
+  text-decoration: underline;
+  cursor: pointer;
+  &:hover {
+    color: #4287f5;
+  }
 `;
 
 /**
@@ -94,6 +100,7 @@ const SignIn = ({ history, location, refetch }) => {
             placeholder="Email or Username"
             borderColor="white"
           />
+          <p style={{color: '#34eb6b '}}>datquadep</p>
         </InputContainer>
 
         <InputContainer left="xs" right="xs">
@@ -105,6 +112,7 @@ const SignIn = ({ history, location, refetch }) => {
             placeholder="Password"
             borderColor="white"
           />
+          <p style={{color: '#34eb6b'}}>123123123</p>
           <A to={Routes.FORGOT_PASSWORD}>
             <ForgotPassword>Forgot password?</ForgotPassword>
           </A>

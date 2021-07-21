@@ -15,6 +15,7 @@ import { CloseIcon } from "components/icons";
 import PostPopupInfo from "./PostPopupInfo";
 import PostPopupComments from "./PostPopupComments";
 import PostPopupOptions from "./PostPopupOptions";
+import { Player, ControlBar, ForwardControl, ReplayControl } from "video-react";
 
 import { GET_POST } from "graphql/post";
 
@@ -110,7 +111,10 @@ const PostPopup = ({ id, closeModal, usedInModal }) => {
   if (error) return <NotFound />;
 
   const post = data.getPost;
-
+  const checkURL = (url) => {
+    if (url) return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
+    return false;
+  };
   return (
     <Root usedInModal={usedInModal}>
       <Head
@@ -124,9 +128,26 @@ const PostPopup = ({ id, closeModal, usedInModal }) => {
       )}
 
       <Container usedInModal={usedInModal}>
-        <Left usedInModal={usedInModal}>
-          <Image src={post.image} usedInModal={usedInModal} />
-        </Left>
+        {/* <Left usedInModal={usedInModal}> */}
+          {checkURL(post.image) && (
+            <Image src={post.image} usedInModal={usedInModal} />
+          )}
+          {!checkURL(post.image) && post.image && (
+            <div style={{ margin: "0px 0px 20px" }}>
+              <Player
+                playsInline
+                poster="https://datatrue.com/assets/video-thumbnail-d220a7bec33b382b21617fdddbe82f2c6491b46574f427454412b6d093d111d5.png"
+                src={post.image}
+              >
+                <ControlBar autoHide={false}>
+                  <ReplayControl seconds={10} order={2.2} />
+
+                  <ForwardControl seconds={10} order={3.2} />
+                </ControlBar>
+              </Player>
+            </div>
+          )}
+        {/* </Left> */}
 
         <Right usedInModal={usedInModal}>
           <Spacing>

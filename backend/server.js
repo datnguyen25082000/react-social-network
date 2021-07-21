@@ -23,7 +23,7 @@ mongoose
 
 // Initializes application
 const app = express();
-
+app.use(express.static('public'))
 // Enable cors
 const corsOptions = {
   origin: process.env.FRONTEND_URL,

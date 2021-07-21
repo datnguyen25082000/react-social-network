@@ -51,7 +51,7 @@ const CommentSection = styled.div`
   overflow: hidden;
   padding: 0 ${(p) => p.theme.spacing.lg} ${(p) => p.theme.spacing.xxs}
     ${(p) => p.theme.spacing.xs};
-  background-color: ${(p) => p.theme.colors.grey[200]};
+  background-color: ${(p) => p.theme.colors.grey[300]};
   border-radius: ${(p) => p.theme.radius.lg};
   margin-left: ${(p) => p.theme.spacing.xxs};
   color: ${(p) => p.theme.colors.text.main};
@@ -114,9 +114,10 @@ export const Comment = ({ comment, postId, postAuthor }) => {
           >
             <UserName>{comment.author.fullName}</UserName>
           </A>
+          <div style={{ display: "block", marginTop: 5, marginBottom: 5 }}>
+            {comment.comment}
+          </div>
         </Spacing>
-
-        {comment.comment}
       </CommentSection>
     </Root>
   );

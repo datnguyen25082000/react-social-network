@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import PropTypes from "prop-types";
 import { generatePath } from "react-router-dom";
 import styled, { css } from "styled-components";
@@ -21,6 +21,7 @@ import PostCardOption from "components/PostCard/PostCardOption";
 import { GET_FOLLOWED_POSTS, DELETE_POST } from "graphql/post";
 import { GET_AUTH_USER } from "graphql/user";
 import { GET_USER_POSTS } from "graphql/user";
+import { Player, ControlBar, ForwardControl, ReplayControl } from "video-react";
 
 import {
   HOME_PAGE_POSTS_LIMIT,
@@ -146,6 +147,16 @@ const CommentLine = styled.div`
   border-top: 1px solid ${(p) => p.theme.colors.border.main};
 `;
 
+const SeeMore = styled.div`
+  color: #04aa6d;
+  margin-top: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
 /**
  * Component for rendering user post
  */
@@ -164,7 +175,8 @@ const PostCard = ({
   const client = useApolloClient();
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const [isOptionOpen, setIsOptionOpen] = useState(false);
-
+  const [lengthComment, setLengthComment] = useState(4);
+  const refVideo = useRef(document.createElement("video"));
   const toggleCreateComment = () => {
     setIsCommentOpen(true);
   };
@@ -207,6 +219,24 @@ const PostCard = ({
     setIsOptionOpen(false);
   };
 
+  const checkURL = (url) => {
+    if (url) return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
+    return false;
+  };
+
+  const handleScroll = () => {
+    if(refVideo.current) {
+      refVideo.current.contentWindow.postMessage(
+        JSON.stringify({
+          action: 'stop-video',
+          parentScrollTop: window.pageYOffset || document.documentElement.scrollTop,
+          parentInnerHeight: window.innerHeight,
+        }),
+        '*',
+      );
+    }
+  };
+
   return (
     <>
       <Root>
@@ -244,7 +274,24 @@ const PostCard = ({
           </Title>
         </Spacing>
 
-        {image && <Poster src={image} onClick={openModal} />}
+        {checkURL(image) && <Poster src={image} onClick={openModal} />}
+
+        {!checkURL(image) && image && (
+          <div style={{ margin: "10px 0px 20px" }}>
+            <Player
+              playsInline
+              ref={refVideo}
+              poster="https://datatrue.com/assets/video-thumbnail-d220a7bec33b382b21617fdddbe82f2c6491b46574f427454412b6d093d111d5.png"
+              src={image}
+            >
+              <ControlBar autoHide={false}>
+                <ReplayControl seconds={10} order={2.2} />
+
+                <ForwardControl seconds={10} order={3.2} />
+              </ControlBar>
+            </Player>
+          </div>
+        )}
 
         <BottomRow>
           <CountAndIcons>
@@ -273,22 +320,31 @@ const PostCard = ({
 
           <Dropdown visibility={isCommentOpen}>
             <Comments>
-              {comments.map((comment) => (
-                <Comment
-                  key={comment.id}
-                  comment={comment}
-                  postId={postId}
-                  postAuthor={author}
-                />
-              ))}
+              {comments.map((comment, index) => {
+                if (index > lengthComment - 1) return <></>;
+                return (
+                  <Comment
+                    key={comment.id}
+                    comment={comment}
+                    postId={postId}
+                    postAuthor={author}
+                  />
+                );
+              })}
+              {comments.length > lengthComment && (
+                <SeeMore
+                  onClick={() => {
+                    setLengthComment(lengthComment + 4);
+                  }}
+                >
+                  View more comments
+                </SeeMore>
+              )}
             </Comments>
             {/* {comments.length > 0 && <CommentLine />} */}
             <Spacing top="xs">
               <CommentLine />
-              <CreateComment
-                post={{ id: postId, author }}
-                focus={isCommentOpen}
-              />
+              <CreateComment post={{ id: postId, author }} focus={false} />
             </Spacing>
           </Dropdown>
         </BottomRow>

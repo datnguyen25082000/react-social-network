@@ -79,7 +79,7 @@ const Message = styled.div`
   border-radius: ${(p) => p.theme.radius.lg};
   color: ${(p) => p.userMessage && p.theme.colors.white};
   background-color: ${(p) =>
-    p.userMessage ? p.theme.colors.primary.light : p.theme.colors.grey[200]};
+    p.userMessage ? p.theme.colors.primary.light : p.theme.colors.grey[300]};
 `;
 
 const Form = styled.form`
@@ -94,7 +94,7 @@ const Form = styled.form`
 const StyledTextarea = styled(Textarea)`
   height: 38px;
   border-radius: ${(p) => p.theme.radius.lg};
-  background-color: ${(p) => p.theme.colors.grey[200]};
+  background-color: ${(p) => p.theme.colors.grey[300]};
 `;
 
 const SendButton = styled(Button)`

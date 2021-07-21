@@ -65,7 +65,7 @@ ${p => p.ghost && `
  */
 export const InputText = styled.input`
   outline: 0;
-  height: 36px;
+  height: 40px;
   width: 100%;
   transition: border 0.1s;
   border-radius: ${(p) => p.theme.radius.sm};
